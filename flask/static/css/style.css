@@ -1,0 +1,130 @@
+/* --- Modern Oxford Refined (v2026) --- */
+
+:root {
+    --oxford-navy: #1B263B;
+    --deep-navy: #0D1321;
+    --oxford-gold: #C5A059;
+    --parchment: #FDFCF0;
+    --soft-white: rgba(255, 255, 255, 0.9);
+    --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* 1. Global Styles */
+body {
+    background: radial-gradient(circle at top right, #FDFCF0 0%, #EAE2B7 100%);
+    background-attachment: fixed;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    color: var(--oxford-navy);
+    line-height: 1.6;
+}
+
+/* 2. Navigation: Modern Frosted Glass */
+.navbar {
+    background-color: rgba(27, 38, 59, 0.95) !important;
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    border-bottom: 3px solid var(--oxford-gold);
+    padding: 1.2rem 0;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--oxford-gold) !important;
+    text-transform: uppercase;
+}
+
+/* 3. Header: Depth and Motion */
+header {
+    background: linear-gradient(135deg, rgba(27, 38, 59, 0.9) 0%, rgba(13, 19, 33, 0.8) 100%), 
+                url('../images/herobg.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--parchment);
+    padding: 140px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+}
+
+/* 4. Book Cards: Floating "Glass" Look */
+.card {
+    background: var(--soft-white) !important;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 20px !important; /* Modern rounded look */
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 30px 60px rgba(27, 38, 59, 0.15) !important;
+    border-color: var(--oxford-gold) !important;
+    background: #ffffff !important;
+}
+
+.card-img-top {
+    padding: 15px;
+    transition: var(--transition);
+    object-fit: contain;
+    height: 320px;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* 5. Buttons: Modern Pill Style */
+.btn-outline-primary {
+    border: 2px solid var(--oxford-navy) !important;
+    color: var(--oxford-navy) !important;
+    border-radius: 50px !important; /* Pill shape is more modern */
+    font-weight: 700;
+    padding: 10px 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--oxford-navy) !important;
+    color: var(--oxford-gold) !important;
+    box-shadow: 0 10px 20px rgba(27, 38, 59, 0.2);
+}
+
+.text-primary {
+    color: var(--oxford-gold) !important;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+/* 6. Inputs (For Login/Register) */
+.form-control {
+    border-radius: 12px !important;
+    border: 2px solid #eee;
+    padding: 12px;
+}
+
+.form-control:focus {
+    border-color: var(--oxford-gold);
+    box-shadow: 0 0 0 0.25rem rgba(197, 160, 89, 0.25);
+}
+
+/* 7. Footer */
+footer {
+    background-color: var(--deep-navy);
+    color: #a0a0a0;
+    border-top: 4px solid var(--oxford-gold);
+    padding: 60px 0;
+}
+/*dashboard*/
+.table-hover tbody tr:hover {
+    background-color: rgba(197, 160, 89, 0.05); /* Very subtle gold highlight */
+    cursor: pointer;
+}

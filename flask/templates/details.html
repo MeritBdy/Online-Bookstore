@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ book[1] }} | BookStream</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/rem.png') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;600&display=swap');
+
+        :root { --navy: #011627; --gold: #d4af37; --cream: #fcfbf7; }
+        body { background-color: var(--cream); font-family: 'Plus Jakarta Sans', sans-serif; color: var(--navy); }
+        
+        .details-container { 
+            background: white; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05); 
+            margin-top: 50px; 
+            overflow: hidden; 
+            border: 1px solid rgba(0,0,0,0.03); 
+        }
+        
+        .img-section { 
+            background: #f8f9fa; 
+            padding: 60px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-right: 1px solid #f0f0f0;
+        }
+        
+        .img-section img { 
+            max-height: 550px; 
+            width: auto; 
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15));
+            border-radius: 8px; 
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        
+        .img-section img:hover { transform: rotate(-2deg) scale(1.03); }
+        
+        .info-section { padding: 60px; }
+        
+        .book-title { font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; }
+        
+        .btn-buy { 
+            background: var(--navy); 
+            color: white; 
+            border-radius: 50px; 
+            padding: 18px 45px; 
+            font-weight: bold; 
+            transition: 0.4s; 
+            text-decoration: none; 
+            display: inline-block; 
+            border: none; 
+        }
+        
+        .btn-buy:hover { 
+            background: var(--gold); 
+            transform: translateY(-5px); 
+            color: white; 
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3); 
+        }
+        
+        .btn-back { 
+            border-radius: 50px; 
+            padding: 18px 30px; 
+            text-decoration: none; 
+            display: inline-block; 
+            transition: 0.3s; 
+            font-weight: 600;
+        }
+        
+        .breadcrumb a { text-decoration: none; color: var(--gold); font-weight: 600; }
+        
+        .description-box {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4a4a4a;
+            border-left: 4px solid var(--gold);
+            padding-left: 20px;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container pb-5">
+        <div class="row mt-3">
+            <div class="col-md-12">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm rounded-4 border-0" role="alert">
+                        <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+
+        <div class="row details-container">
+            <div class="col-lg-5 img-section">
+                <img src="{{ book[4] }}" class="img-fluid" alt="{{ book[1] }}">
+            </div>
+
+            <div class="col-lg-7 info-section">
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('dashboard') }}">Collection</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Masterpiece Details</li>
+                    </ol>
+                </nav>
+
+                <h1 class="book-title fw-bold mb-3">{{ book[1] }}</h1>
+                <p class="lead text-muted mb-4">Crafted by <span class="text-dark fw-bold">{{ book[2] }}</span></p>
+                
+                <div class="description-box">
+                    {{ book[5] if book[5] else "No description available for this masterpiece yet." }}
+                </div>
+
+                <div class="my-5" style="opacity: 0.1;"><hr></div>
+
+                <div class="d-flex align-items-center justify-content-between flex-wrap g-4">
+                    <div class="price-tag mb-3 mb-sm-0">
+                        <span class="text-muted d-block small text-uppercase fw-bold letter-spacing-1">Current Value</span>
+                        <h2 class="display-4 fw-bold mb-0" style="color: var(--gold);">${{ book[3] }}</h2>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <a href="{{ url_for('add_to_cart', book_id=book[0]) }}" class="btn btn-buy shadow-lg me-3">
+                            <i class="bi bi-cart-plus-fill me-2"></i> ADD TO COLLECTION
+                        </a>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-dark btn-back">
+                            <i class="bi bi-arrow-left me-2"></i> BACK
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-5 p-4 bg-light rounded-4 shadow-sm border-start border-4" style="border-color: var(--gold) !important;">
+                    <p class="mb-0 small text-dark">
+                        <i class="bi bi-patch-check-fill text-success me-2"></i> 
+                        <strong>Note Quote:</strong> Beyond the ink and paper, this work carries a legacy. It's not just a book, but a piece of history preserved for your personal library.
+                    </p>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

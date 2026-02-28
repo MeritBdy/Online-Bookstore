@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Library Cart | BookStream</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/rem.png') }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Plus+Jakarta+Sans:wght@400;600&display=swap');
+
+        :root { 
+            --navy: #011627; 
+            --gold: #d4af37; 
+            --cream: #fcfbf7;
+            --soft-gray: #f8f9fa;
+        }
+
+        body { 
+            background-color: var(--cream); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: var(--navy); 
+        }
+
+        .navbar { background-color: var(--navy); border-bottom: 2px solid var(--gold); }
+
+        /* Modern Cart Card */
+        .cart-wrapper { 
+            background: white; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05); 
+            padding: 40px; 
+            margin-top: 40px;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .page-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2.5rem; 
+            color: var(--navy);
+        }
+
+        /* Item Row Styling */
+        .item-row { 
+            background: var(--soft-gray);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .item-row:hover { 
+            background: white;
+            border-color: var(--gold);
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .book-thumb { 
+            height: 100px; 
+            width: 75px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+
+        /* Pricing & Summary */
+        .summary-box { 
+            background: var(--navy); 
+            color: white;
+            border-radius: 20px; 
+            padding: 30px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .btn-checkout { 
+            background: var(--gold); 
+            color: var(--navy); 
+            border-radius: 12px; 
+            padding: 16px; 
+            font-weight: 700; 
+            border: none; 
+            width: 100%; 
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-checkout:hover { 
+            background: #fff; 
+            color: var(--navy);
+            transform: scale(1.02);
+        }
+
+        .remove-link {
+            color: #ef4444;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .remove-link:hover { opacity: 0.7; }
+
+        .empty-state { padding: 80px 0; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('dashboard') }}">📚 BOOKSTREAM</a>
+            <div class="d-flex align-items-center text-white">
+                <span class="small opacity-75 me-3">Oxford Premium Member</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="cart-wrapper">
+            <div class="row align-items-center mb-5">
+                <div class="col-md-7">
+                    <h1 class="page-title mb-0">My Library Cart</h1>
+                    <p class="text-muted">You have {{ items|length }} exclusive titles in your collection.</p>
+                </div>
+                <div class="col-md-5 text-md-end">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-dark rounded-pill px-4">
+                        <i class="bi bi-plus-lg me-2"></i>Browse More
+                    </a>
+                </div>
+            </div>
+
+            {% if items %}
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    {% for item in items %}
+                    <div class="item-row d-flex align-items-center">
+                        <img src="{{ item[4] }}" class="book-thumb me-4" alt="cover">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-1">{{ item[1] }}</h5>
+                            <span class="badge bg-white text-dark border mb-2">Hardcover Edition</span>
+                            <p class="text-muted small mb-0">Author: {{ item[2] }}</p>
+                        </div>
+                        <div class="text-end px-4">
+                            <h4 class="fw-bold mb-0">${{ item[3] }}</h4>
+                            <a href="{{ url_for('remove_from_cart', book_id=item[0]) }}" class="remove-link">
+                             <i class="bi bi-trash me-1"></i>Remove
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="mt-4 text-center">
+                        <a href="{{ url_for('clear_cart') }}" class="btn btn-link text-muted text-decoration-none small">
+                            <i class="bi bi-x-circle me-1"></i>Discard Entire Cart
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="summary-box shadow-lg">
+                        <h4 class="fw-bold mb-4">Summary</h4>
+                        <div class="d-flex justify-content-between mb-3 opacity-75">
+                            <span>Subtotal</span>
+                            <span>${{ total }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 opacity-75">
+                            <span>Vat (Inclusive)</span>
+                            <span>$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="h5">Total Amount</span>
+                            <span class="h5 fw-bold text-warning">${{ total }}</span>
+                        </div>
+
+                        <a href="{{ url_for('checkout') }}" class="btn btn-checkout mb-3">
+                            Complete Order <i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                        
+                        <div class="text-center">
+                            <small class="opacity-50" style="font-size: 0.7rem;">
+                                <i class="bi bi-lock-fill me-1"></i> Encrypted Oxford Transaction
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state text-center">
+                <i class="bi bi-bag-plus display-1 text-muted opacity-25"></i>
+                <h3 class="mt-4 fw-bold">Your cart is as empty as a fresh page.</h3>
+                <p class="text-muted">Start adding masterpieces to your library today.</p>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-navy px-5 py-3 rounded-pill mt-3">Start Browsing</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
